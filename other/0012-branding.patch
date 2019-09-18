@@ -97,12 +97,12 @@
        base::FilePath()
 --- a/chrome/common/chrome_paths.cc
 +++ b/chrome/common/chrome_paths.cc
-@@ -59,7 +59,7 @@
- #if defined(GOOGLE_CHROME_BUILD)
+@@ -59,7 +59,7 @@ const base::FilePath::CharType kFilepathSinglePrefExtensions[] =
+ #if BUILDFLAG(GOOGLE_CHROME_BRANDING)
      FILE_PATH_LITERAL("/usr/share/google-chrome/extensions");
  #else
 -    FILE_PATH_LITERAL("/usr/share/chromium/extensions");
 +    FILE_PATH_LITERAL("/usr/share/inox/extensions");
- #endif  // defined(GOOGLE_CHROME_BUILD)
- 
+ #endif  // BUILDFLAG(GOOGLE_CHROME_BRANDING)
+
  // The path to the hint file that tells the pepper plugin loader
