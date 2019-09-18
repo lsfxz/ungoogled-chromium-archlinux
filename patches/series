@@ -1,14 +1,9 @@
-debian_buster/fixes/vaapi.patch
 debian_buster/disable/installer.patch
 debian_buster/disable/font-tests.patch
 debian_buster/disable/swiftshader.patch
-debian_buster/system/icu.patch
 debian_buster/system/jpeg.patch
-debian_buster/system/lcms.patch
 debian_buster/system/nspr.patch
-debian_buster/system/zlib.patch
 debian_buster/system/event.patch
-debian_buster/system/jsoncpp.patch
 debian_buster/system/openjpeg.patch
 debian_buster/system/convertutf.patch
 upstream/chromium-skia-harmony.patch
@@ -18,3 +13,4 @@ upstream/fix-wrong-string-initialization-in-LinkedHashSet.patch
 upstream/include-limits-in-web_time_range.cc.patch
 upstream/include-memory-in-one_euro_filter.h.patch
 upstream/link-against-harfbuzz-subset.patch
+upstream/vaapi.patch

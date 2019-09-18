@@ -10,7 +10,7 @@ pkgname=inox
 _pkgname=ungoogled-chromium
 # Commit or tag for the upstream ungoogled-chromium repo
 _ungoogled_version='77.0.3865.75-1'
-_ungoogled_archlinux_version=24df0aaff32e6a6504e2fa577a9eab35bd7aa7b7
+_ungoogled_archlinux_version=2641787a5cf3681c806c55e7ed0e3a4a6b83837a
 _chromium_version=$(curl -sL https://raw.githubusercontent.com/Eloston/ungoogled-chromium/${_ungoogled_version}/chromium_version.txt)
 _ungoogled_revision=$(curl -sL https://raw.githubusercontent.com/Eloston/ungoogled-chromium/${_ungoogled_version}/revision.txt)
 pkgver=${_chromium_version}
@@ -44,9 +44,6 @@ sha256sums=('eb952ff241e719cbdcc2aae1832ecc1dd2263736ab38ee1dbf88ac9120119789'
             '04917e3cd4307d8e31bfb0027a5dce6d086edb10ff8a716024fbb8bb0c7dccf1'
             'SKIP'
             '413c4bffa2acc3b3d8c05bb38a8ab8c42be19e3e2fd9bd10b3739b7647ec7cb1'
-            'SKIP')
-            '04917e3cd4307d8e31bfb0027a5dce6d086edb10ff8a716024fbb8bb0c7dccf1'
-            'SKIP'
             'SKIP')
 
 # Possible replacements are listed in build/linux/unbundle/replace_gn_files.py
