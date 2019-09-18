@@ -10,7 +10,7 @@ pkgname=inox
 _pkgname=ungoogled-chromium
 # Commit or tag for the upstream ungoogled-chromium repo
 _ungoogled_version='77.0.3865.75-1'
-_ungoogled_archlinux_version=2641787a5cf3681c806c55e7ed0e3a4a6b83837a
+_ungoogled_archlinux_version=e7701f3
 _chromium_version=$(curl -sL https://raw.githubusercontent.com/Eloston/ungoogled-chromium/${_ungoogled_version}/chromium_version.txt)
 _ungoogled_revision=$(curl -sL https://raw.githubusercontent.com/Eloston/ungoogled-chromium/${_ungoogled_version}/revision.txt)
 pkgver=${_chromium_version}
@@ -161,6 +161,8 @@ build() {
 }
 
 package() {
+  _ungoogled_archlinux_repo="$srcdir/ungoogled-chromium-archlinux"
+
   cd chromium-launcher-$_launcher_ver
   make PREFIX=/usr DESTDIR="$pkgdir" install
   install -Dm644 LICENSE \
@@ -194,7 +196,7 @@ package() {
   fi
 
   for size in 16 22 24 32 48 64 128 256; do
-    install -Dm644 "$_ungoogled_archlinux_repo/other/product_logo_$size.png" \
+    install -Dm644 "${_ungoogled_archlinux_repo}/other/product_logo_$size.png" \
       "$pkgdir/usr/share/icons/hicolor/${size}x${size}/apps/$pkgname.png"
   done
 

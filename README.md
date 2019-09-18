@@ -1,5 +1,11 @@
 # ungoogled-chromium-archlinux
 
+*NOTE:* This is pretty much just ungoogled-chromium but with the old inox-branding still in place.
+I keep this maintained mostly because a differently branded chromium allows me to have an
+ungoogled chromium and a regular chromium installed side by side.
+This is kept for personal use, but if you have use for it, feel free to build it yourself :)
+
+
 Arch Linux packaging for [ungoogled-chromium](//github.com/Eloston/ungoogled-chromium).
 
 ## Downloads
