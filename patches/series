@@ -1,7 +1,4 @@
-inox-patchset/chromium-skia-harmony.patch
-inox-patchset/fix-cfi-failures-with-unbundled-libxml.patch
 debian_buster/fixes/vaapi.patch
-debian_buster/disable/chromeos.patch
 debian_buster/disable/installer.patch
 debian_buster/disable/font-tests.patch
 debian_buster/disable/swiftshader.patch
@@ -14,3 +11,10 @@ debian_buster/system/event.patch
 debian_buster/system/jsoncpp.patch
 debian_buster/system/openjpeg.patch
 debian_buster/system/convertutf.patch
+upstream/chromium-skia-harmony.patch
+upstream/chromium-system-icu.patch
+upstream/chromium-system-zlib.patch
+upstream/fix-wrong-string-initialization-in-LinkedHashSet.patch
+upstream/include-limits-in-web_time_range.cc.patch
+upstream/include-memory-in-one_euro_filter.h.patch
+upstream/link-against-harfbuzz-subset.patch

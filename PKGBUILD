@@ -37,12 +37,16 @@ provides=('inox')
 conflicts=('inox')
 source=(https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${_chromium_version}.tar.xz
         chromium-launcher-$_launcher_ver.tar.gz::https://github.com/foutrelis/chromium-launcher/archive/v$_launcher_ver.tar.gz
-        "git+https://github.com/lsfxz/ungoogled-inox-archlinux.git#commit=${_ungoogled_archlinux_version}"
+        "git+https://github.com/lsfxz/ungoogled-chromium-archlinux.git#commit=${_ungoogled_archlinux_version}"
+        "https://raw.githubusercontent.com/GrapheneOS/Vanadium/609ac77401cdcf085051b894420856463eb52e20/0010-disable-seed-based-field-trials.patch"
         "git+https://github.com/Eloston/ungoogled-chromium#tag=${_ungoogled_version}")
-sha256sums=($(curl -sL https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${_chromium_version}.tar.xz.hashes | grep sha256 | cut -d ' ' -f3)
+sha256sums=('eb952ff241e719cbdcc2aae1832ecc1dd2263736ab38ee1dbf88ac9120119789'
             '04917e3cd4307d8e31bfb0027a5dce6d086edb10ff8a716024fbb8bb0c7dccf1'
             'SKIP'
-            'https://raw.githubusercontent.com/GrapheneOS/Vanadium/609ac77401cdcf085051b894420856463eb52e20/0010-disable-seed-based-field-trials.patch'
+            '413c4bffa2acc3b3d8c05bb38a8ab8c42be19e3e2fd9bd10b3739b7647ec7cb1'
+            'SKIP')
+            '04917e3cd4307d8e31bfb0027a5dce6d086edb10ff8a716024fbb8bb0c7dccf1'
+            'SKIP'
             'SKIP')
 
 # Possible replacements are listed in build/linux/unbundle/replace_gn_files.py
@@ -89,6 +93,12 @@ prepare() {
   patch -Np1 -i ../0010-disable-seed-based-field-trials.patch
   msg2 'Applying domain substitution'
   python "$_utils/domain_substitution.py" apply -r "$_ungoogled_repo/domain_regex.list" -f "$_ungoogled_repo/domain_substitution.list" -c domainsubcache.tar.gz ./
+
+ # https://crbug.com/893950
+  sed -i -e 's/\<xmlMalloc\>/malloc/' -e 's/\<xmlFree\>/free/' \
+    third_party/blink/renderer/core/xml/*.cc \
+    third_party/blink/renderer/core/xml/parser/xml_document_parser.cc \
+    third_party/libxml/chromium/libxml_utils.cc
 
   # Force script incompatible with Python 3 to use /usr/bin/python2
   sed -i '1s|python$|&2|' third_party/dom_distiller_js/protoc_plugins/*.py
