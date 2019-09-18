@@ -6,9 +6,10 @@
 # Contributor: Jan "heftig" Steffens <jan.steffens@gmail.com>
 # Contributor: Daniel J Griffiths <ghost1227@archlinux.us>
 
-pkgname=ungoogled-chromium
+pkgname=inox
+_pkgname=ungoogled-chromium
 # Commit or tag for the upstream ungoogled-chromium repo
-_ungoogled_version='76.0.3809.132-1'
+_ungoogled_version='77.0.3865.75-1'
 _ungoogled_archlinux_version=943c4a3abc7a6d88a01bd9d51bdce9b9919064c2
 _chromium_version=$(curl -sL https://raw.githubusercontent.com/Eloston/ungoogled-chromium/${_ungoogled_version}/chromium_version.txt)
 _ungoogled_revision=$(curl -sL https://raw.githubusercontent.com/Eloston/ungoogled-chromium/${_ungoogled_version}/revision.txt)
@@ -16,7 +17,7 @@ pkgver=${_chromium_version}
 _ungoogled_archlinux_pkgrel=0
 pkgrel=$((_ungoogled_revision + _ungoogled_archlinux_pkgrel))
 _launcher_ver=6
-pkgdesc="A lightweight approach to removing Google web service dependency"
+pkgdesc="A lightweight approach to removing Google web service dependency - inox branded"
 arch=('x86_64')
 url="https://github.com/ungoogled-software/ungoogled-chromium-archlinux"
 license=('BSD')
@@ -32,15 +33,16 @@ optdepends=('pepper-flash: support for Flash content'
             'libva-intel-driver: for hardware video acceleration with Intel GPUs'
             'libva-mesa-driver: for hardware video acceleration with AMD/ATI GPUs'
             'libva-vdpau-driver: for hardware video acceleration with NVIDIA GPUs')
-provides=('chromium')
-conflicts=('chromium')
+provides=('inox')
+conflicts=('inox')
 source=(https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${_chromium_version}.tar.xz
         chromium-launcher-$_launcher_ver.tar.gz::https://github.com/foutrelis/chromium-launcher/archive/v$_launcher_ver.tar.gz
-        "git+https://github.com/ungoogled-software/ungoogled-chromium-archlinux.git#commit=${_ungoogled_archlinux_version}"
+        "git+https://github.com/lsfxz/ungoogled-inox-archlinux.git#commit=${_ungoogled_archlinux_version}"
         "git+https://github.com/Eloston/ungoogled-chromium#tag=${_ungoogled_version}")
 sha256sums=($(curl -sL https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${_chromium_version}.tar.xz.hashes | grep sha256 | cut -d ' ' -f3)
             '04917e3cd4307d8e31bfb0027a5dce6d086edb10ff8a716024fbb8bb0c7dccf1'
             'SKIP'
+            'https://raw.githubusercontent.com/GrapheneOS/Vanadium/609ac77401cdcf085051b894420856463eb52e20/0010-disable-seed-based-field-trials.patch'
             'SKIP')
 
 # Possible replacements are listed in build/linux/unbundle/replace_gn_files.py
@@ -73,8 +75,8 @@ _unwanted_bundled_libs=(
 depends+=(${_system_libs[@]})
 
 prepare() {
-  _ungoogled_archlinux_repo="$srcdir/$pkgname-archlinux"
-  _ungoogled_repo="$srcdir/$pkgname"
+  _ungoogled_archlinux_repo="$srcdir/ungoogled-chromium-archlinux"
+  _ungoogled_repo="$srcdir/$_pkgname"
   _utils="${_ungoogled_repo}/utils"
 
   cd "$srcdir/chromium-${_chromium_version}"
@@ -83,6 +85,8 @@ prepare() {
   python "$_utils/prune_binaries.py" ./ "$_ungoogled_repo/pruning.list"
   msg2 'Applying patches'
   python "$_utils/patches.py" apply ./ "$_ungoogled_repo/patches" "$_ungoogled_archlinux_repo/patches"
+  patch -Np1 -i ${_ungoogled_archlinux_repo}/other/0012-branding.patch
+  patch -Np1 -i ../0010-disable-seed-based-field-trials.patch
   msg2 'Applying domain substitution'
   python "$_utils/domain_substitution.py" apply -r "$_ungoogled_repo/domain_regex.list" -f "$_ungoogled_repo/domain_substitution.list" -c domainsubcache.tar.gz ./
 
@@ -107,11 +111,15 @@ prepare() {
 
   python2 build/linux/unbundle/replace_gn_files.py \
     --system-libraries "${!_system_libs[@]}"
+
+  msg2 'Applying Chromium launcher patches'
+  cd "$srcdir/chromium-launcher-$_launcher_ver"
+  patch -Np1 -i ${_ungoogled_archlinux_repo}/other/0020-launcher-branding.patch
 }
 
 build() {
-  _ungoogled_archlinux_repo="$srcdir/$pkgname-archlinux"
-  _ungoogled_repo="$srcdir/$pkgname"
+  _ungoogled_archlinux_repo="$srcdir/ungoogled-chromium-archlinux"
+  _ungoogled_repo="$srcdir/$_pkgname"
 
   make -C chromium-launcher-$_launcher_ver
 
@@ -149,46 +157,41 @@ package() {
   cd chromium-launcher-$_launcher_ver
   make PREFIX=/usr DESTDIR="$pkgdir" install
   install -Dm644 LICENSE \
-    "$pkgdir/usr/share/licenses/chromium/LICENSE.launcher"
+    "$pkgdir/usr/share/licenses/$pkgname/LICENSE.launcher"
 
   cd "$srcdir/chromium-${_chromium_version}"
 
-  install -D out/Default/chrome "$pkgdir/usr/lib/chromium/chromium"
-  install -Dm4755 out/Default/chrome_sandbox "$pkgdir/usr/lib/chromium/chrome-sandbox"
-  ln -s /usr/lib/chromium/chromedriver "$pkgdir/usr/bin/chromedriver"
-
+  install -D out/Default/chrome "$pkgdir/usr/lib/$pkgname/$pkgname"
+  install -Dm4755 out/Default/chrome_sandbox "$pkgdir/usr/lib/$pkgname/chrome-sandbox"
+  install -D out/Default/chromedriver "$pkgdir/usr/lib/$pkgname/inoxdriver"
+  ln -s /usr/lib/$pkgname/inoxdriver "$pkgdir/usr/bin/inoxdriver"
   install -Dm644 chrome/installer/linux/common/desktop.template \
-    "$pkgdir/usr/share/applications/chromium.desktop"
+    "$pkgdir/usr/share/applications/$pkgname.desktop"
   install -Dm644 chrome/app/resources/manpage.1.in \
-    "$pkgdir/usr/share/man/man1/chromium.1"
+    "$pkgdir/usr/share/man/man1/$pkgname.1"
   sed -i \
-    -e "s/@@MENUNAME@@/Chromium/g" \
-    -e "s/@@PACKAGE@@/chromium/g" \
-    -e "s/@@USR_BIN_SYMLINK_NAME@@/chromium/g" \
-    "$pkgdir/usr/share/applications/chromium.desktop" \
-    "$pkgdir/usr/share/man/man1/chromium.1"
+    -e "s/@@MENUNAME@@/Inox/g" \
+    -e "s/@@PACKAGE@@/$pkgname/g" \
+    -e "s/@@USR_BIN_SYMLINK_NAME@@/$pkgname/g" \
+    "$pkgdir/usr/share/applications/$pkgname.desktop" \
+    "$pkgdir/usr/share/man/man1/$pkgname.1"
 
   cp \
     out/Default/{chrome_{100,200}_percent,resources}.pak \
-    out/Default/{*.bin,chromedriver} \
-    "$pkgdir/usr/lib/chromium/"
-  install -Dm644 -t "$pkgdir/usr/lib/chromium/locales" out/Default/locales/*.pak
+    out/Default/*.bin \
+    "$pkgdir/usr/lib/$pkgname/"
+  install -Dm644 -t "$pkgdir/usr/lib/$pkgname/locales" out/Default/locales/*.pak
 
   if [[ -z ${_system_libs[icu]+set} ]]; then
-    cp out/Default/icudtl.dat "$pkgdir/usr/lib/chromium/"
+    cp out/Default/icudtl.dat "$pkgdir/usr/lib/$pkgname/"
   fi
 
-  for size in 22 24 48 64 128 256; do
-    install -Dm644 "chrome/app/theme/chromium/product_logo_$size.png" \
-      "$pkgdir/usr/share/icons/hicolor/${size}x${size}/apps/chromium.png"
+  for size in 16 22 24 32 48 64 128 256; do
+    install -Dm644 "$_ungoogled_archlinux_repo/other/product_logo_$size.png" \
+      "$pkgdir/usr/share/icons/hicolor/${size}x${size}/apps/$pkgname.png"
   done
 
-  for size in 16 32; do
-    install -Dm644 "chrome/app/theme/default_100_percent/chromium/product_logo_$size.png" \
-      "$pkgdir/usr/share/icons/hicolor/${size}x${size}/apps/chromium.png"
-  done
-
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/chromium/LICENSE"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
 
 # vim:set ts=2 sw=2 et:
