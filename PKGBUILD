@@ -9,7 +9,7 @@
 pkgname=inox
 _pkgname=ungoogled-chromium
 # Commit or tag for the upstream ungoogled-chromium repo
-_ungoogled_version='77.0.3865.90-1'
+_ungoogled_version='77.0.3865.120-1'
 _ungoogled_archlinux_version=23b8ab6
 _chromium_version=$(curl -sL https://raw.githubusercontent.com/Eloston/ungoogled-chromium/${_ungoogled_version}/chromium_version.txt)
 _ungoogled_revision=$(curl -sL https://raw.githubusercontent.com/Eloston/ungoogled-chromium/${_ungoogled_version}/revision.txt)
@@ -40,7 +40,7 @@ source=(https://commondatastorage.googleapis.com/chromium-browser-official/chrom
         "git+https://github.com/lsfxz/ungoogled-chromium-archlinux.git#commit=${_ungoogled_archlinux_version}"
         "https://raw.githubusercontent.com/GrapheneOS/Vanadium/609ac77401cdcf085051b894420856463eb52e20/0010-disable-seed-based-field-trials.patch"
         "git+https://github.com/Eloston/ungoogled-chromium#tag=${_ungoogled_version}")
-sha256sums=('eb952ff241e719cbdcc2aae1832ecc1dd2263736ab38ee1dbf88ac9120119789'
+sha256sums=('d792f9b09b1dcfd64e68f47a611c540dd1383dd9abd78ca1e06b2a7e2ff06af8'
             '04917e3cd4307d8e31bfb0027a5dce6d086edb10ff8a716024fbb8bb0c7dccf1'
             'SKIP'
             '413c4bffa2acc3b3d8c05bb38a8ab8c42be19e3e2fd9bd10b3739b7647ec7cb1'
