@@ -11,6 +11,7 @@ _pkgname=ungoogled-chromium
 pkgver=78.0.3904.70
 pkgrel=1
 _launcher_ver=6
+_ungoogled_commit=bc4e0eb
 pkgdesc="A lightweight approach to removing Google web service dependency - inox branded"
 arch=('x86_64')
 url="https://github.com/ungoogled-software/ungoogled-chromium-archlinux"
@@ -29,25 +30,49 @@ optdepends=('pepper-flash: support for Flash content'
             'libva-vdpau-driver: for hardware video acceleration with NVIDIA GPUs')
 provides=('inox')
 conflicts=('inox')
+_raw_github=https://raw.githubusercontent.com/lsfxz/ungoogled-chromium-archlinux/inox
 source=(https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${pkgver}.tar.xz
         chromium-launcher-$_launcher_ver.tar.gz::https://github.com/foutrelis/chromium-launcher/archive/v$_launcher_ver.tar.gz
-        "ungoogled-chromium::git+https://github.com/Eloston/ungoogled-chromium.git#commit=${_ungoogled_archlinux_version}"
-        "https://raw.githubusercontent.com/GrapheneOS/Vanadium/609ac77401cdcf085051b894420856463eb52e20/0010-disable-seed-based-field-trials.patch"
+        "ungoogled-chromium::git+https://github.com/Eloston/ungoogled-chromium.git#commit=${_ungoogled_commit}"
+        "https://raw.githubusercontent.com/GrapheneOS/Vanadium/10/0009-disable-seed-based-field-trials.patch"
         flags.archlinux.gn
         inox-drirc-disable-10bpc-color-configs.conf
-        vaapi-fix.patch
-        add-missing-include-for-unique_ptr.patch
-        dns_util-make-DohUpgradeEntry-non-const.patch
-        fix-shutdown-crash-in-ProfileManager.patch
-        chromium-system-icu.patch
-        chromium-system-zlib.patch
-        fix-spammy-unique-font-matching-log.patch
-        chromium-widevine.patch
-        chromium-skia-harmony.patch)
-sha256sums=('d792f9b09b1dcfd64e68f47a611c540dd1383dd9abd78ca1e06b2a7e2ff06af8'
+        "${_raw_github}/inox/product_logo_16.png"
+        "${_raw_github}/inox/product_logo_22.png"
+        "${_raw_github}/inox/product_logo_24.png"
+        "${_raw_github}/inox/product_logo_32.png"
+        "${_raw_github}/inox/product_logo_48.png"
+        "${_raw_github}/inox/product_logo_64.png"
+        "${_raw_github}/inox/product_logo_128.png"
+        "${_raw_github}/inox/product_logo_256.png"
+        "${_raw_github}/inox/0020-launcher-branding.patch"
+        "${_raw_github}/inox/0012-branding.patch"
+        "${_raw_github}/patches/vaapi-fix.patch"
+        "${_raw_github}/patches/add-missing-include-for-unique_ptr.patch"
+        "${_raw_github}/patches/dns_util-make-DohUpgradeEntry-non-const.patch"
+        "${_raw_github}/patches/fix-shutdown-crash-in-ProfileManager.patch"
+        "${_raw_github}/patches/chromium-system-icu.patch"
+        "${_raw_github}/patches/chromium-system-zlib.patch"
+        "${_raw_github}/patches/fix-spammy-unique-font-matching-log.patch"
+        "${_raw_github}/patches/chromium-widevine.patch"
+        "${_raw_github}/patches/chromium-skia-harmony.patch")
+sha256sums=('ddc5794097d65ba19c1ae359c2057b08921e7b38b7afe9d5ec45f5e8b9a87462'
             '04917e3cd4307d8e31bfb0027a5dce6d086edb10ff8a716024fbb8bb0c7dccf1'
             'SKIP'
-            '413c4bffa2acc3b3d8c05bb38a8ab8c42be19e3e2fd9bd10b3739b7647ec7cb1'
+            'c11ceb71833556abb58d0780562f59aadeb81a1cc599167edf6a71b31e335935'
+            'c56b3c8e6ff0ad644edf818b276799d9591e6f72b54f862970ce07a1a18598d5'
+            '38ebabfb8f15a14d7feed1c5210dbcdcc1768cba08e9b3b5031ee588752ddc58'
+            '71471fa4690894420f9e04a2e9a622af620d92ac2714a35f9a4c4e90fa3968dd'
+            '4a533acefbbc1567b0d74a1c0903e9179b8c59c1beabe748850795815366e509'
+            '7b88830c5e0e9819f514ad68aae885d427541a907e25607e47dee1b0f38975fd'
+            '8c10e3b03b13555b461add586422472e0a96d3af49a078d6d952bc0719ba9d94'
+            'cc08b771d83b7434c3173c27419bc7d1d4ee375256f3169ef2b9333ba1f2beeb'
+            '53a1e8da18069eb4d6ab3af9c923c22a0f020241a4839c3140e3601052ddf6ff'
+            '896993987d4ef9f0ac7db454f288117316c2c80ed0b6764019afd760db222dad'
+            '3df9b3bbdc07fde63d9e400954dcc6ab6e0e5454f0ef6447570eef0549337354'
+            '7e8f34e146284aa63d34d50663e52a94f8cbeaaa431ba27bdc948592dd930662'
+            '35242bf293403eb6ea4b68271d9d62201ef1a0497825f478016e6efda1513d66'
+            '9256123898cbdd4da4a111e5aa8752d5c6c2c07e59ca8677751791dd3321f6a9'
             '49052e8aa630c4aa57bf46823edc32b7b309493275163c3bb3f9fd390c73356e'
             '69694ab12a5ced389916c0c5e8c7bdc191544f576b134ddfb2fe9d4ed9ec4494'
             '4f81612c28957987f7344d8ce2b95a4a63136a8319c9751819436b11c62df057'
@@ -138,7 +163,7 @@ prepare() {
 
   # inox/vanadium
   patch -Np1 -i ../0012-branding.patch
-  patch -Np1 -i ../0010-disable-seed-based-field-trials.patch
+  patch -Np1 -i ../0009-disable-seed-based-field-trials.patch
 
   # Force script incompatible with Python 3 to use /usr/bin/python2
   sed -i '1s|python$|&2|' third_party/dom_distiller_js/protoc_plugins/*.py
