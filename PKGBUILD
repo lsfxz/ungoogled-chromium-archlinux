@@ -156,7 +156,7 @@ prepare() {
   _ungoogled_repo="$srcdir/$_pkgname"
 
   cd ${_ungoogled_repo}
-  patch -Np1 -i ${srcdir}/843.patch
+  patch -Np1 -i ${srcdir}/848.patch
   cd "$srcdir/chromium-${pkgver}"
 
   _utils="${_ungoogled_repo}/utils"
