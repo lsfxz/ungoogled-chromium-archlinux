@@ -8,10 +8,10 @@
 
 pkgname=inox
 _pkgname=ungoogled-chromium
-pkgver=78.0.3904.87
+pkgver=78.0.3904.97
 pkgrel=1
 _launcher_ver=6
-_ungoogled_commit=497a6e7d0e3d116f987d3763aa5550d3a7b8c7d5
+_ungoogled_commit=5fcef7491aff75e28d264f8d90a179169376bae4
 pkgdesc="A lightweight approach to removing Google web service dependency - inox branded"
 arch=('x86_64')
 url="https://github.com/ungoogled-software/ungoogled-chromium-archlinux"
@@ -35,7 +35,6 @@ source=(https://commondatastorage.googleapis.com/chromium-browser-official/chrom
         chromium-launcher-$_launcher_ver.tar.gz::https://github.com/foutrelis/chromium-launcher/archive/v$_launcher_ver.tar.gz
         "ungoogled-chromium::git+https://github.com/Eloston/ungoogled-chromium.git#commit=${_ungoogled_commit}"
         "https://raw.githubusercontent.com/GrapheneOS/Vanadium/10/0009-disable-seed-based-field-trials.patch"
-        https://patch-diff.githubusercontent.com/raw/Eloston/ungoogled-chromium/pull/848.patch
         flags.archlinux.gn
         inox-drirc-disable-10bpc-color-configs.conf
         "${_raw_github}/inox/product_logo_16.png"
@@ -57,11 +56,10 @@ source=(https://commondatastorage.googleapis.com/chromium-browser-official/chrom
         "${_raw_github}/patches/fix-spammy-unique-font-matching-log.patch"
         "${_raw_github}/patches/chromium-widevine.patch"
         "${_raw_github}/patches/chromium-skia-harmony.patch")
-sha256sums=('8df6ffca4087fc43e7d0443acc4f758399b248e96482705bd4fe7e88d239eb56'
+sha256sums=('d1f49ab9f4f973536166f587114553c21a29977bdc350dd407a89d34e22a9d07'
             '04917e3cd4307d8e31bfb0027a5dce6d086edb10ff8a716024fbb8bb0c7dccf1'
             'SKIP'
             'c11ceb71833556abb58d0780562f59aadeb81a1cc599167edf6a71b31e335935'
-            '7c6b7553ce2eda106e234b55386df14755e424285d02f6f0d92e9ae8467f75a0'
             'c56b3c8e6ff0ad644edf818b276799d9591e6f72b54f862970ce07a1a18598d5'
             '38ebabfb8f15a14d7feed1c5210dbcdcc1768cba08e9b3b5031ee588752ddc58'
             '71471fa4690894420f9e04a2e9a622af620d92ac2714a35f9a4c4e90fa3968dd'
@@ -154,10 +152,6 @@ prepare() {
 
   # Ungoogled chromium stuff
   _ungoogled_repo="$srcdir/$_pkgname"
-
-  cd ${_ungoogled_repo}
-  patch -Np1 -i ${srcdir}/848.patch
-  cd "$srcdir/chromium-${pkgver}"
 
   _utils="${_ungoogled_repo}/utils"
   msg2 'Applying ungoogled chromium patches'
