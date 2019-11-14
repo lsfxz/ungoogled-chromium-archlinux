@@ -9,7 +9,7 @@
 pkgname=inox
 _pkgname=ungoogled-chromium
 pkgver=78.0.3904.97
-pkgrel=1
+pkgrel=2
 _launcher_ver=6
 _ungoogled_commit=5fcef7491aff75e28d264f8d90a179169376bae4
 pkgdesc="A lightweight approach to removing Google web service dependency - inox branded"
