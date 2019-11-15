@@ -11,7 +11,7 @@ _pkgname=ungoogled-chromium
 pkgver=78.0.3904.97
 pkgrel=2
 _launcher_ver=6
-_ungoogled_commit=5fcef7491aff75e28d264f8d90a179169376bae4
+_ungoogled_commit=f2914b4d0e0a062da92f1434780dd168b12678db
 pkgdesc="A lightweight approach to removing Google web service dependency - inox branded"
 arch=('x86_64')
 url="https://github.com/ungoogled-software/ungoogled-chromium-archlinux"
@@ -55,7 +55,8 @@ source=(https://commondatastorage.googleapis.com/chromium-browser-official/chrom
         "${_raw_github}/patches/chromium-system-zlib.patch"
         "${_raw_github}/patches/fix-spammy-unique-font-matching-log.patch"
         "${_raw_github}/patches/chromium-widevine.patch"
-        "${_raw_github}/patches/chromium-skia-harmony.patch")
+        "${_raw_github}/patches/chromium-skia-harmony.patch"
+        "icu65.patch::https://git.archlinux.org/svntogit/packages.git/plain/trunk/icu65.patch?h=packages/chromium")
 sha256sums=('d1f49ab9f4f973536166f587114553c21a29977bdc350dd407a89d34e22a9d07'
             '04917e3cd4307d8e31bfb0027a5dce6d086edb10ff8a716024fbb8bb0c7dccf1'
             'SKIP'
@@ -80,7 +81,8 @@ sha256sums=('d1f49ab9f4f973536166f587114553c21a29977bdc350dd407a89d34e22a9d07'
             'eb67eda4945a89c3b90473fa8dc20637511ca4dcb58879a8ed6bf403700ca9c8'
             '6fbffe59b886195b92c9a55137cef83021c16593f49714acb20023633e3ebb19'
             'd081f2ef8793544685aad35dea75a7e6264a2cb987ff3541e6377f4a3650a28b'
-            '771292942c0901092a402cc60ee883877a99fb804cb54d568c8c6c94565a48e1')
+            '771292942c0901092a402cc60ee883877a99fb804cb54d568c8c6c94565a48e1'
+            '1de9bdbfed482295dda45c7d4e323cee55a34e42f66b892da1c1a778682b7a41')
 
 # Possible replacements are listed in build/linux/unbundle/replace_gn_files.py
 # Keys are the names in the above script; values are the dependencies in Arch
@@ -136,6 +138,9 @@ prepare() {
 
   # https://crbug.com/1005244
   patch -Np1 -i ../fix-shutdown-crash-in-ProfileManager.patch
+
+  # https://crbug.com/1014272
+  patch -Np1 -i ../icu65.patch
 
   # Fixes from Gentoo
   patch -Np1 -i ../chromium-system-icu.patch
