@@ -8,10 +8,10 @@
 
 pkgname=inox
 _pkgname=ungoogled-chromium
-pkgver=78.0.3904.97
-pkgrel=2
+pkgver=78.0.3904.108
+pkgrel=1
 _launcher_ver=6
-_ungoogled_commit=f2914b4d0e0a062da92f1434780dd168b12678db
+_ungoogled_commit=c93eac89ab3af316e02868ce8dc0a70f1d22dd83
 pkgdesc="A lightweight approach to removing Google web service dependency - inox branded"
 arch=('x86_64')
 url="https://github.com/ungoogled-software/ungoogled-chromium-archlinux"
@@ -57,7 +57,7 @@ source=(https://commondatastorage.googleapis.com/chromium-browser-official/chrom
         "${_raw_github}/patches/chromium-widevine.patch"
         "${_raw_github}/patches/chromium-skia-harmony.patch"
         "icu65.patch::https://git.archlinux.org/svntogit/packages.git/plain/trunk/icu65.patch?h=packages/chromium")
-sha256sums=('d1f49ab9f4f973536166f587114553c21a29977bdc350dd407a89d34e22a9d07'
+sha256sums=('f9c53839f306d2973de27723360024f7904101d426b9e7e9cdb56e8bcc775b0e'
             '04917e3cd4307d8e31bfb0027a5dce6d086edb10ff8a716024fbb8bb0c7dccf1'
             'SKIP'
             'c11ceb71833556abb58d0780562f59aadeb81a1cc599167edf6a71b31e335935'
