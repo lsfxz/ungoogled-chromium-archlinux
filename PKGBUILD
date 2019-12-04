@@ -9,9 +9,9 @@
 pkgname=inox
 _pkgname=ungoogled-chromium
 pkgver=78.0.3904.108
-pkgrel=1
+pkgrel=2
 _launcher_ver=6
-_ungoogled_commit=c93eac89ab3af316e02868ce8dc0a70f1d22dd83
+_ungoogled_commit=6cc874cfc8a250224811584f2c293dc61ec4faeb
 pkgdesc="A lightweight approach to removing Google web service dependency - inox branded"
 arch=('x86_64')
 url="https://github.com/ungoogled-software/ungoogled-chromium-archlinux"
