@@ -8,10 +8,10 @@
 
 pkgname=inox
 _pkgname=ungoogled-chromium
-pkgver=78.0.3904.108
-pkgrel=2
+pkgver=79.0.3945.79
+pkgrel=1
 _launcher_ver=6
-_ungoogled_commit=6cc874cfc8a250224811584f2c293dc61ec4faeb
+_ungoogled_commit=931c73b8a34a150539c4743dcd7491e22bfe425e
 pkgdesc="A lightweight approach to removing Google web service dependency - inox branded"
 arch=('x86_64')
 url="https://github.com/ungoogled-software/ungoogled-chromium-archlinux"
@@ -23,7 +23,7 @@ makedepends=('python' 'python2' 'gperf' 'yasm' 'mesa' 'ninja' 'nodejs' 'git'
              'pipewire' 'clang' 'lld' 'gn' 'java-runtime-headless')
 optdepends=('pepper-flash: support for Flash content'
             'kdialog: needed for file dialogs in KDE'
-            'gnome-keyring: for storing passwords in GNOME keyring'
+            'org.freedesktop.secrets: password storage backend on GNOME / Xfce'
             'kwallet: for storing passwords in KWallet'
             'libva-intel-driver: for hardware video acceleration with Intel GPUs'
             'libva-mesa-driver: for hardware video acceleration with AMD/ATI GPUs'
@@ -48,20 +48,21 @@ source=(https://commondatastorage.googleapis.com/chromium-browser-official/chrom
         "${_raw_github}/inox/0020-launcher-branding.patch"
         "${_raw_github}/inox/0012-branding.patch"
         "${_raw_github}/patches/vaapi-fix.patch"
-        "${_raw_github}/patches/add-missing-include-for-unique_ptr.patch"
-        "${_raw_github}/patches/dns_util-make-DohUpgradeEntry-non-const.patch"
-        "${_raw_github}/patches/fix-shutdown-crash-in-ProfileManager.patch"
+        "launch_manager.h-uses-std-vector.patch::https://git.archlinux.org/svntogit/packages.git/plain/trunk/launch_manager.h-uses-std-vector.patch?h=packages/chromium"
+        "include-algorithm-to-use-std-lower_bound.patch::https://git.archlinux.org/svntogit/packages.git/plain/trunk/include-algorithm-to-use-std-lower_bound.patch?h=packages/chromium"
+        "chromium-system-hb.patch::https://git.archlinux.org/svntogit/packages.git/plain/trunk/chromium-system-hb.patch?h=packages/chromium"
         "${_raw_github}/patches/chromium-system-icu.patch"
         "${_raw_github}/patches/chromium-system-zlib.patch"
         "${_raw_github}/patches/fix-spammy-unique-font-matching-log.patch"
         "${_raw_github}/patches/chromium-widevine.patch"
-        "${_raw_github}/patches/chromium-skia-harmony.patch"
+         'https://patch-diff.githubusercontent.com/raw/Eloston/ungoogled-chromium/pull/883.patch'
+         "${_raw_github}/patches/chromium-skia-harmony.patch"
         "icu65.patch::https://git.archlinux.org/svntogit/packages.git/plain/trunk/icu65.patch?h=packages/chromium")
-sha256sums=('f9c53839f306d2973de27723360024f7904101d426b9e7e9cdb56e8bcc775b0e'
+sha256sums=('e1a7362d396b0f72e6ad8c1d53cae67db201e0eeaa2a96dbe9214d080925bcf3'
             '04917e3cd4307d8e31bfb0027a5dce6d086edb10ff8a716024fbb8bb0c7dccf1'
             'SKIP'
-            'c11ceb71833556abb58d0780562f59aadeb81a1cc599167edf6a71b31e335935'
-            'c56b3c8e6ff0ad644edf818b276799d9591e6f72b54f862970ce07a1a18598d5'
+            '7b4e881f9eb89482a102e74dc626c931f11347bee48469c5273b5ee0fd285b73'
+            'b22059dd2c07238b43b2bb8ba27d74940cc844af1073b4cd094b22565cd28326'
             '38ebabfb8f15a14d7feed1c5210dbcdcc1768cba08e9b3b5031ee588752ddc58'
             '71471fa4690894420f9e04a2e9a622af620d92ac2714a35f9a4c4e90fa3968dd'
             '4a533acefbbc1567b0d74a1c0903e9179b8c59c1beabe748850795815366e509'
@@ -74,13 +75,14 @@ sha256sums=('f9c53839f306d2973de27723360024f7904101d426b9e7e9cdb56e8bcc775b0e'
             '7e8f34e146284aa63d34d50663e52a94f8cbeaaa431ba27bdc948592dd930662'
             '777d342aac9bd8c5fd359b95e6bfd4d667a8d69c9fde52141c5c7829618e7b22'
             '9256123898cbdd4da4a111e5aa8752d5c6c2c07e59ca8677751791dd3321f6a9'
-            '49052e8aa630c4aa57bf46823edc32b7b309493275163c3bb3f9fd390c73356e'
-            '69694ab12a5ced389916c0c5e8c7bdc191544f576b134ddfb2fe9d4ed9ec4494'
-            '4f81612c28957987f7344d8ce2b95a4a63136a8319c9751819436b11c62df057'
+            'bd0fae907c451252e91c4cbf1ad301716bc9f8a4644ecc60e9590a64197477d3'
+            '1f906676563e866e2b59719679e76e0b2f7f082f48ef0593e86da0351a586c73'
+            'c0ad3fa426cb8fc1a237ddc6309a6b2dd4055bbe41dd07f50071ee61f969b81a'
             'e73cc2ee8d3ea35aab18c478d76fdfc68ca4463e1e10306fa1e738c03b3f26b5'
             'eb67eda4945a89c3b90473fa8dc20637511ca4dcb58879a8ed6bf403700ca9c8'
             '6fbffe59b886195b92c9a55137cef83021c16593f49714acb20023633e3ebb19'
             'd081f2ef8793544685aad35dea75a7e6264a2cb987ff3541e6377f4a3650a28b'
+            'd95b2116fb8193f522d71f5d88d530ff82d6981a1ce64464c0921de150cc1ec1'
             '771292942c0901092a402cc60ee883877a99fb804cb54d568c8c6c94565a48e1'
             '1de9bdbfed482295dda45c7d4e323cee55a34e42f66b892da1c1a778682b7a41')
 
@@ -130,14 +132,9 @@ prepare() {
   # Fix VA-API on Intel and Nvidia
   patch -Np1 -i ../vaapi-fix.patch
 
-  # Missing include in third_party/blink/public/platform/web_rtc_rtp_source.h
-  patch -Np1 -i ../add-missing-include-for-unique_ptr.patch
-
-  # https://crbug.com/957519#c23
-  patch -Np1 -i ../dns_util-make-DohUpgradeEntry-non-const.patch
-
-  # https://crbug.com/1005244
-  patch -Np1 -i ../fix-shutdown-crash-in-ProfileManager.patch
+  # https://crbug.com/819294
+  patch -Np1 -i ../launch_manager.h-uses-std-vector.patch
+  patch -Np1 -i ../include-algorithm-to-use-std-lower_bound.patch
 
   # https://crbug.com/1014272
   patch -Np1 -i ../icu65.patch
@@ -145,18 +142,25 @@ prepare() {
   # Fixes from Gentoo
   patch -Np1 -i ../chromium-system-icu.patch
   patch -Np1 -i ../chromium-system-zlib.patch
+  patch -Np1 -i ../chromium-system-hb.patch
 
   # https://crbug.com/1005508
   patch -Np1 -i ../fix-spammy-unique-font-matching-log.patch
 
-  # Load Widevine CDM if available
-  #patch -Np1 -i ../chromium-widevine.patch
+  # Load bundled Widevine CDM if available (see chromium-widevine in the AUR)
+  # M79 is supposed to download it as a component but it doesn't seem to work
+  # patch -Np1 -i ../chromium-widevine.patch
 
   # https://crbug.com/skia/6663#c10
   patch -Np0 -i ../chromium-skia-harmony.patch
 
   # Ungoogled chromium stuff
   _ungoogled_repo="$srcdir/$_pkgname"
+
+  # temporary manual patch for 79.0.3945.79
+  cd ${_ungoogled_repo}
+  patch -Np1 -i 883.patch
+  cd "$srcdir/chromium-${pkgver}"
 
   _utils="${_ungoogled_repo}/utils"
   msg2 'Applying ungoogled chromium patches'
@@ -220,6 +224,10 @@ build() {
   cp "$_ungoogled_repo/flags.gn" "out/Release/args.gn"
   printf '\n' >> "out/Release/args.gn"
   cat "$srcdir/flags.archlinux.gn" >> "out/Release/args.gn"
+
+  if [[ -n ${_system_libs[icu]+set} ]]; then
+    _flags+=('icu_use_data_file=false')
+  fi
 
   if check_option strip y; then
     _flags+=('symbol_level=0')
