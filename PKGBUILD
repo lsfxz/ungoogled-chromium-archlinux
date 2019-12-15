@@ -11,7 +11,7 @@ _pkgname=ungoogled-chromium
 pkgver=79.0.3945.79
 pkgrel=1
 _launcher_ver=6
-_ungoogled_commit=931c73b8a34a150539c4743dcd7491e22bfe425e
+_ungoogled_commit=d138ee8f00802257162783091c65154c8abfc83c
 pkgdesc="A lightweight approach to removing Google web service dependency - inox branded"
 arch=('x86_64')
 url="https://github.com/ungoogled-software/ungoogled-chromium-archlinux"
@@ -47,7 +47,7 @@ source=(https://commondatastorage.googleapis.com/chromium-browser-official/chrom
         "${_raw_github}/inox/product_logo_256.png"
         "${_raw_github}/inox/0020-launcher-branding.patch"
         "${_raw_github}/inox/0012-branding.patch"
-        "${_raw_github}/patches/vaapi-fix.patch"
+        "vaapi-fix.patch::https://aur.archlinux.org/cgit/aur.git/plain/vaapi-fix.patch?h=chromium-vaapi"
         "launch_manager.h-uses-std-vector.patch::https://git.archlinux.org/svntogit/packages.git/plain/trunk/launch_manager.h-uses-std-vector.patch?h=packages/chromium"
         "include-algorithm-to-use-std-lower_bound.patch::https://git.archlinux.org/svntogit/packages.git/plain/trunk/include-algorithm-to-use-std-lower_bound.patch?h=packages/chromium"
         "chromium-system-hb.patch::https://git.archlinux.org/svntogit/packages.git/plain/trunk/chromium-system-hb.patch?h=packages/chromium"
@@ -55,14 +55,13 @@ source=(https://commondatastorage.googleapis.com/chromium-browser-official/chrom
         "${_raw_github}/patches/chromium-system-zlib.patch"
         "${_raw_github}/patches/fix-spammy-unique-font-matching-log.patch"
         "${_raw_github}/patches/chromium-widevine.patch"
-         'https://patch-diff.githubusercontent.com/raw/Eloston/ungoogled-chromium/pull/883.patch'
          "${_raw_github}/patches/chromium-skia-harmony.patch"
         "icu65.patch::https://git.archlinux.org/svntogit/packages.git/plain/trunk/icu65.patch?h=packages/chromium")
 sha256sums=('e1a7362d396b0f72e6ad8c1d53cae67db201e0eeaa2a96dbe9214d080925bcf3'
             '04917e3cd4307d8e31bfb0027a5dce6d086edb10ff8a716024fbb8bb0c7dccf1'
             'SKIP'
             '7b4e881f9eb89482a102e74dc626c931f11347bee48469c5273b5ee0fd285b73'
-            'b22059dd2c07238b43b2bb8ba27d74940cc844af1073b4cd094b22565cd28326'
+            'c56b3c8e6ff0ad644edf818b276799d9591e6f72b54f862970ce07a1a18598d5'
             '38ebabfb8f15a14d7feed1c5210dbcdcc1768cba08e9b3b5031ee588752ddc58'
             '71471fa4690894420f9e04a2e9a622af620d92ac2714a35f9a4c4e90fa3968dd'
             '4a533acefbbc1567b0d74a1c0903e9179b8c59c1beabe748850795815366e509'
@@ -74,7 +73,7 @@ sha256sums=('e1a7362d396b0f72e6ad8c1d53cae67db201e0eeaa2a96dbe9214d080925bcf3'
             '3df9b3bbdc07fde63d9e400954dcc6ab6e0e5454f0ef6447570eef0549337354'
             '7e8f34e146284aa63d34d50663e52a94f8cbeaaa431ba27bdc948592dd930662'
             '777d342aac9bd8c5fd359b95e6bfd4d667a8d69c9fde52141c5c7829618e7b22'
-            '9256123898cbdd4da4a111e5aa8752d5c6c2c07e59ca8677751791dd3321f6a9'
+            '0ec6ee49113cc8cc5036fa008519b94137df6987bf1f9fbffb2d42d298af868a'
             'bd0fae907c451252e91c4cbf1ad301716bc9f8a4644ecc60e9590a64197477d3'
             '1f906676563e866e2b59719679e76e0b2f7f082f48ef0593e86da0351a586c73'
             'c0ad3fa426cb8fc1a237ddc6309a6b2dd4055bbe41dd07f50071ee61f969b81a'
@@ -82,7 +81,6 @@ sha256sums=('e1a7362d396b0f72e6ad8c1d53cae67db201e0eeaa2a96dbe9214d080925bcf3'
             'eb67eda4945a89c3b90473fa8dc20637511ca4dcb58879a8ed6bf403700ca9c8'
             '6fbffe59b886195b92c9a55137cef83021c16593f49714acb20023633e3ebb19'
             'd081f2ef8793544685aad35dea75a7e6264a2cb987ff3541e6377f4a3650a28b'
-            'd95b2116fb8193f522d71f5d88d530ff82d6981a1ce64464c0921de150cc1ec1'
             '771292942c0901092a402cc60ee883877a99fb804cb54d568c8c6c94565a48e1'
             '1de9bdbfed482295dda45c7d4e323cee55a34e42f66b892da1c1a778682b7a41')
 
@@ -157,11 +155,6 @@ prepare() {
   # Ungoogled chromium stuff
   _ungoogled_repo="$srcdir/$_pkgname"
 
-  # temporary manual patch for 79.0.3945.79
-  cd ${_ungoogled_repo}
-  patch -Np1 -i 883.patch
-  cd "$srcdir/chromium-${pkgver}"
-
   _utils="${_ungoogled_repo}/utils"
   msg2 'Applying ungoogled chromium patches'
   # Prune binaries
@@ -217,6 +210,8 @@ build() {
   export AR=ar
   export NM=nm
 
+  local _flags=(
+  '')
   # Ungoogled Chromium stuff
   _ungoogled_repo="$srcdir/$_pkgname"
   mkdir -p out/Release
@@ -225,7 +220,7 @@ build() {
   printf '\n' >> "out/Release/args.gn"
   cat "$srcdir/flags.archlinux.gn" >> "out/Release/args.gn"
 
-  if [[ -n ${_system_libs[icu]+set} ]]; then
+  if [[ -n ${_system_libs[icu]+set}  ]]; then
     _flags+=('icu_use_data_file=false')
   fi
 
@@ -241,6 +236,10 @@ build() {
   # Do not warn about unknown warning options
   CFLAGS+='   -Wno-unknown-warning-option'
   CXXFLAGS+=' -Wno-unknown-warning-option'
+
+  for flag in ${_flags[*]}; do
+    echo "${flag}" >> "out/Release/args.gn"
+  done
 
   gn gen out/Release --script-executable=/usr/bin/python2
   ninja -C out/Release chrome chrome_sandbox chromedriver
@@ -291,5 +290,3 @@ package() {
 
   install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
-
-# vim:set ts=2 sw=2 et:
