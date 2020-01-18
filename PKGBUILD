@@ -8,10 +8,10 @@
 
 pkgname=inox
 _pkgname=ungoogled-chromium
-pkgver=79.0.3945.88
+pkgver=79.0.3945.117
 pkgrel=1
 _launcher_ver=6
-_ungoogled_commit=eebf397abed1fd2fcb57d4d6e232a82c7c6dc0e5
+_ungoogled_commit=e7d8f6637e11b6980a68d35995bc7830d2fcbb19
 pkgdesc="A lightweight approach to removing Google web service dependency - inox branded"
 arch=('x86_64')
 url="https://github.com/ungoogled-software/ungoogled-chromium-archlinux"
@@ -58,11 +58,11 @@ source=(https://commondatastorage.googleapis.com/chromium-browser-official/chrom
         "chromium-widevine.patch::${_arch_svn}/chromium-widevine.patch?h=packages/chromium"
         "chromium-skia-harmony.patch::${_arch_svn}/chromium-skia-harmony.patch?h=packages/chromium"
         "icu65.patch::${_arch_svn}/icu65.patch?h=packages/chromium")
-sha256sums=('4f18171d2225502018fcafae860ce9329199bcd6a0e50f8d83de041afd723fc9'
+sha256sums=('4d960e8bd790cc1c8e7f0632790424957c4996a8a91b9d899eb572acec854ef1'
             '04917e3cd4307d8e31bfb0027a5dce6d086edb10ff8a716024fbb8bb0c7dccf1'
             'SKIP'
             '7b4e881f9eb89482a102e74dc626c931f11347bee48469c5273b5ee0fd285b73'
-            'c56b3c8e6ff0ad644edf818b276799d9591e6f72b54f862970ce07a1a18598d5'
+            'cb1092585d98c8f98d1b8800f9a88d664a40ebe61efeb3d3363ad51dc186643c'
             '38ebabfb8f15a14d7feed1c5210dbcdcc1768cba08e9b3b5031ee588752ddc58'
             '71471fa4690894420f9e04a2e9a622af620d92ac2714a35f9a4c4e90fa3968dd'
             '4a533acefbbc1567b0d74a1c0903e9179b8c59c1beabe748850795815366e509'
@@ -97,7 +97,7 @@ declare -gA _system_libs=(
   [libdrm]=
   [libjpeg]=libjpeg
   #[libpng]=libpng    # https://crbug.com/752403#c10
-  #[libvpx]=libvpx    # https://github.com/webmproject/libvpx/commit/5a0242ba5c
+  [libvpx]=libvpx
   [libwebp]=libwebp
   [libxml]=libxml2
   [libxslt]=libxslt
