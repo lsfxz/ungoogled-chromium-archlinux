@@ -8,10 +8,10 @@
 
 pkgname=inox
 _pkgname=ungoogled-chromium
-pkgver=79.0.3945.117
+pkgver=79.0.3945.130
 pkgrel=1
 _launcher_ver=6
-_ungoogled_commit=e7d8f6637e11b6980a68d35995bc7830d2fcbb19
+_ungoogled_commit=337047d7eb4314616939e08d21cbad2409b95d4f
 pkgdesc="A lightweight approach to removing Google web service dependency - inox branded"
 arch=('x86_64')
 url="https://github.com/ungoogled-software/ungoogled-chromium-archlinux"
@@ -57,12 +57,13 @@ source=(https://commondatastorage.googleapis.com/chromium-browser-official/chrom
         "fix-spammy-unique-font-matching-log.patch::${_arch_svn}/fix-spammy-unique-font-matching-log.patch?h=packages/chromium"
         "chromium-widevine.patch::${_arch_svn}/chromium-widevine.patch?h=packages/chromium"
         "chromium-skia-harmony.patch::${_arch_svn}/chromium-skia-harmony.patch?h=packages/chromium"
-        "icu65.patch::${_arch_svn}/icu65.patch?h=packages/chromium")
-sha256sums=('4d960e8bd790cc1c8e7f0632790424957c4996a8a91b9d899eb572acec854ef1'
+        "icu65.patch::${_arch_svn}/icu65.patch?h=packages/chromium"
+        "sync-enable-USSPasswords-by-default.patch::${_arch_svn}/sync-enable-USSPasswords-by-default.patch?h=packages/chromium")
+sha256sums=('56193431ab9d1193773b133d86b419bfae8d8b9196eea253660895e0e8f87ba0'
             '04917e3cd4307d8e31bfb0027a5dce6d086edb10ff8a716024fbb8bb0c7dccf1'
             'SKIP'
-            '7b4e881f9eb89482a102e74dc626c931f11347bee48469c5273b5ee0fd285b73'
-            'cb1092585d98c8f98d1b8800f9a88d664a40ebe61efeb3d3363ad51dc186643c'
+            '24aca47c691646beb898eddbde74e62e26793ec8433e9edc3bfb645dcacdcebe'
+            'c56b3c8e6ff0ad644edf818b276799d9591e6f72b54f862970ce07a1a18598d5'
             '38ebabfb8f15a14d7feed1c5210dbcdcc1768cba08e9b3b5031ee588752ddc58'
             '71471fa4690894420f9e04a2e9a622af620d92ac2714a35f9a4c4e90fa3968dd'
             '4a533acefbbc1567b0d74a1c0903e9179b8c59c1beabe748850795815366e509'
@@ -81,9 +82,10 @@ sha256sums=('4d960e8bd790cc1c8e7f0632790424957c4996a8a91b9d899eb572acec854ef1'
             'e73cc2ee8d3ea35aab18c478d76fdfc68ca4463e1e10306fa1e738c03b3f26b5'
             'eb67eda4945a89c3b90473fa8dc20637511ca4dcb58879a8ed6bf403700ca9c8'
             '6fbffe59b886195b92c9a55137cef83021c16593f49714acb20023633e3ebb19'
-            'd081f2ef8793544685aad35dea75a7e6264a2cb987ff3541e6377f4a3650a28b'
+            '709e2fddba3c1f2ed4deb3a239fc0479bfa50c46e054e7f32db4fb1365fed070'
             '771292942c0901092a402cc60ee883877a99fb804cb54d568c8c6c94565a48e1'
-            '1de9bdbfed482295dda45c7d4e323cee55a34e42f66b892da1c1a778682b7a41')
+            '1de9bdbfed482295dda45c7d4e323cee55a34e42f66b892da1c1a778682b7a41'
+            '08ef82476780e0864b5bf7f20eb19db320e73b9a5d4f595351e12e97dda8746f')
 
 # Possible replacements are listed in build/linux/unbundle/replace_gn_files.py
 # Keys are the names in the above script; values are the dependencies in Arch
@@ -137,6 +139,9 @@ prepare() {
 
   # https://crbug.com/1014272
   patch -Np1 -i ../icu65.patch
+
+  # https://crbug.com/1027929
+  patch -Np1 -i ../sync-enable-USSPasswords-by-default.patch
 
   # Fixes from Gentoo
   patch -Np1 -i ../chromium-system-icu.patch
