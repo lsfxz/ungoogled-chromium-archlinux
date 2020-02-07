@@ -74,10 +74,10 @@ index 1ca92ba..5af9b57 100644
  
  // The path to the hint file that tells the pepper plugin loader
 diff --git a/chrome/test/chromedriver/chrome/chrome_finder.cc b/chrome/test/chromedriver/chrome/chrome_finder.cc
-index 6cfcf9a..8500d01 100644
+index 6cfcf9a..fe6950d 100644
 --- a/chrome/test/chromedriver/chrome/chrome_finder.cc
 +++ b/chrome/test/chromedriver/chrome/chrome_finder.cc
-@@ -134,13 +134,7 @@ void GetApplicationDirs(std::vector<base::FilePath>* locations);
+@@ -134,14 +134,7 @@ void GetApplicationDirs(std::vector<base::FilePath>* locations);
  bool FindChrome(base::FilePath* browser_exe) {
  #if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX)
    base::FilePath browser_exes_array[] = {
@@ -88,7 +88,8 @@ index 6cfcf9a..8500d01 100644
 -    base::FilePath("chrome"),
 -    base::FilePath("chromium"),
 -    base::FilePath("chromium-browser")
+-#endif
 +    base::FilePath("inox")
- #endif
  #else
        // it will compile but won't work on other OSes
+       base::FilePath()
