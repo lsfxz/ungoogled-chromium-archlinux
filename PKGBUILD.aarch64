@@ -185,7 +185,7 @@ prepare() {
   python "$_utils/domain_substitution.py" apply -r "$_ungoogled_repo/domain_regex.list" -f "$_ungoogled_repo/domain_substitution.list" -c domainsubcache.tar.gz ./
 
   # inox/vanadium
-  # patch -Np1 -i ../0012-branding.patch
+  patch -Np1 -i ../0012-branding.patch
   patch -Np1 -i ../0009-disable-seed-based-field-trials.patch
 
   # Force script incompatible with Python 3 to use /usr/bin/python2
