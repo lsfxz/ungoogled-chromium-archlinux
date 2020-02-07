@@ -1,23 +1,10 @@
---- a/chrome/common/chrome_paths_linux.cc
-+++ b/chrome/common/chrome_paths_linux.cc
-@@ -87,11 +87,7 @@
-         GetXDGDirectory(env.get(), kXdgConfigHomeEnvVar, kDotConfigDir);
-   }
- 
--#if BUILDFLAG(GOOGLE_CHROME_BRANDING)
--  *result = config_dir.Append("google-chrome" + GetChannelSuffixForDataDir());
--#else
--  *result = config_dir.Append("chromium");
--#endif
-+  *result = config_dir.Append("inox");
-   return true;
- }
- 
+diff --git a/chrome/app/chromium_strings.grd b/chrome/app/chromium_strings.grd
+index 90228f4..6ce5b71 100644
 --- a/chrome/app/chromium_strings.grd
 +++ b/chrome/app/chromium_strings.grd
-@@ -130,10 +130,10 @@
-         Disconnecting <ph name="USERNAME">$1<ex>someone@example.com</ex></ph> will clear your history, bookmarks, settings, and other Chromium data stored on this device. Data stored in your Google Account will not be cleared and can be managed on <ph name="GOOGLE_DASHBOARD_LINK">&lt;a target="_blank" href="$2"&gt;</ph>Google Dashboard<ph name="END_GOOGLE_DASHBOARD_LINK">&lt;/a&gt;</ph>.
-       </message>
+@@ -154,10 +154,10 @@ If you update this file, be sure also to update google_chrome_strings.grd. -->
+       </if>
+ 
        <message name="IDS_PRODUCT_NAME" desc="The Chrome application name">
 -        Chromium
 +        Inox
@@ -28,7 +15,7 @@
        </message>
        <if expr="is_win">
          <message name="IDS_SXS_SHORTCUT_NAME" desc="Unused in Chromium builds" translateable="false">
-@@ -143,7 +143,7 @@
+@@ -167,7 +167,7 @@ If you update this file, be sure also to update google_chrome_strings.grd. -->
          <message name="IDS_SHORTCUT_NAME_DEV" desc="Unused in Chromium builds" translateable="false">
          </message>
          <message name="IDS_PRODUCT_DESCRIPTION" desc="Browser description">
@@ -37,16 +24,16 @@
          </message>
        </if>
        <if expr="chromeos">
-@@ -166,7 +166,7 @@
-         sign in to Chromium
-       </message>
+@@ -189,7 +189,7 @@ If you update this file, be sure also to update google_chrome_strings.grd. -->
+         </message>
+       </if>
        <message name="IDS_TASK_MANAGER_TITLE" desc="The title of the Task Manager window">
 -        Task Manager - Chromium
 +        Task Manager - Inox
        </message>
        <message name="IDS_SESSION_CRASHED_VIEW_UMA_OPTIN" desc="Text besides the checkbox to let users optin to UMA in the restore from previous crash bubble.">
          Help make Chromium better by sending crash reports and <ph name="UMA_LINK">$1<ex>usage statistics</ex></ph> to Google
-@@ -590,7 +590,7 @@
+@@ -544,7 +544,7 @@ Chromium is unable to recover your settings.
  
        <if expr="use_titlecase and not chromeos">
          <message name="IDS_ABOUT" desc="In Title Case: The text label of the About Chrome menu item">
@@ -55,7 +42,7 @@
          </message>
          <message name="IDS_UPDATE_NOW" desc="In Title Case: The text label of the Update Chrome Now menu item">
            Update &amp;Chromium
-@@ -598,7 +598,7 @@
+@@ -552,7 +552,7 @@ Chromium is unable to recover your settings.
        </if>
        <if expr="not use_titlecase and not chromeos">
          <message name="IDS_ABOUT" desc="The text label of the About Chrome menu item">
@@ -64,7 +51,7 @@
          </message>
          <message name="IDS_UPDATE_NOW" desc="The text label of the Update Chrome Now menu item">
            Update &amp;Chromium
-@@ -615,7 +615,7 @@
+@@ -572,7 +572,7 @@ Chromium is unable to recover your settings.
  
        <if expr="is_macosx">
          <message name="IDS_APP_MENU_PRODUCT_NAME" desc="The application's short name, used for the Mac's application menu, activity monitor, etc. This should be less than 16 characters. Example: Chrome, not Google Chrome.">
@@ -73,36 +60,35 @@
          </message>
          <message name="IDS_HELPER_NAME" desc="The helper application's name.  Should contain the Chrome application name (IDS_PRODUCT_NAME). Example: Google Chrome Helper.">
            Chromium Helper
---- a/chrome/test/chromedriver/chrome/chrome_finder.cc
-+++ b/chrome/test/chromedriver/chrome/chrome_finder.cc
-@@ -94,15 +94,12 @@
- bool FindChrome(base::FilePath* browser_exe) {
-   base::FilePath browser_exes_array[] = {
- #if defined(OS_WIN)
--      base::FilePath(L"chrome.exe")
-+      base::FilePath(L"inox.exe")
- #elif defined(OS_MACOSX)
--      base::FilePath("Google Chrome.app/Contents/MacOS/Google Chrome"),
--      base::FilePath("Chromium.app/Contents/MacOS/Chromium")
-+      base::FilePath("Google Chrome.app/Contents/MacOS/Inox"),
-+      base::FilePath("Inox.app/Contents/MacOS/Inox")
- #elif defined(OS_LINUX)
--      base::FilePath("google-chrome"),
--      base::FilePath("chrome"),
--      base::FilePath("chromium"),
--      base::FilePath("chromium-browser")
-+      base::FilePath("inox"),
- #else
-       // it will compile but won't work on other OSes
-       base::FilePath()
+diff --git a/chrome/common/chrome_paths.cc b/chrome/common/chrome_paths.cc
+index 1ca92ba..5af9b57 100644
 --- a/chrome/common/chrome_paths.cc
 +++ b/chrome/common/chrome_paths.cc
-@@ -59,7 +59,7 @@ const base::FilePath::CharType kFilepathSinglePrefExtensions[] =
+@@ -58,7 +58,7 @@ const base::FilePath::CharType kFilepathSinglePrefExtensions[] =
  #if BUILDFLAG(GOOGLE_CHROME_BRANDING)
      FILE_PATH_LITERAL("/usr/share/google-chrome/extensions");
  #else
 -    FILE_PATH_LITERAL("/usr/share/chromium/extensions");
 +    FILE_PATH_LITERAL("/usr/share/inox/extensions");
  #endif  // BUILDFLAG(GOOGLE_CHROME_BRANDING)
-
+ 
  // The path to the hint file that tells the pepper plugin loader
+diff --git a/chrome/test/chromedriver/chrome/chrome_finder.cc b/chrome/test/chromedriver/chrome/chrome_finder.cc
+index 6cfcf9a..8500d01 100644
+--- a/chrome/test/chromedriver/chrome/chrome_finder.cc
++++ b/chrome/test/chromedriver/chrome/chrome_finder.cc
+@@ -134,13 +134,7 @@ void GetApplicationDirs(std::vector<base::FilePath>* locations);
+ bool FindChrome(base::FilePath* browser_exe) {
+ #if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX)
+   base::FilePath browser_exes_array[] = {
+-    base::FilePath(chrome::kBrowserProcessExecutablePath),
+-    base::FilePath(chrome::kBrowserProcessExecutablePathChromium),
+-#if defined(OS_LINUX)
+-    base::FilePath("google-chrome"),
+-    base::FilePath("chrome"),
+-    base::FilePath("chromium"),
+-    base::FilePath("chromium-browser")
++    base::FilePath("inox")
+ #endif
+ #else
+       // it will compile but won't work on other OSes
