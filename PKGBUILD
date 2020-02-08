@@ -9,7 +9,7 @@
 pkgname=inox
 _pkgname=ungoogled-chromium
 pkgver=80.0.3987.87
-pkgrel=1
+pkgrel=2
 _launcher_ver=6
 _ungoogled_commit=a2fa3ae20f47e576bf0b070358df46afe132e14a
 pkgdesc="A lightweight approach to removing Google web service dependency - inox branded"
@@ -55,6 +55,8 @@ source=(https://commondatastorage.googleapis.com/chromium-browser-official/chrom
         "remove-verbose-logging-in-local-unique-font-matching.patch::${_arch_svn}/remove-verbose-logging-in-local-unique-font-matching.patch?h=packages/chromium"
         "fix-building-with-unbundled-libxml.patch::${_arch_svn}/fix-building-with-unbundled-libxml.patch?h=packages/chromium"
         "fix-browser-frame-view-not-getting-a-relayout.patch::${_arch_svn}/fix-browser-frame-view-not-getting-a-relayout.patch?h=packages/chromium"
+        "rename-Relayout-in-DesktopWindowTreeHostPlatform.patch::${_arch_svn}/rename-Relayout-in-DesktopWindowTreeHostPlatform.patch?h=packages/chromium"
+        "rebuild-Linux-frame-button-cache-when-activation.patch::${_arch_svn}/rebuild-Linux-frame-button-cache-when-activation.patch?h=packages/chromium"
         "vaapi-fix.patch::https://aur.archlinux.org/cgit/aur.git/plain/vaapi-fix.patch?h=chromium-vaapi"
         "chromium-widevine.patch::${_arch_svn}/chromium-widevine.patch?h=packages/chromium"
         "chromium-skia-harmony.patch::${_arch_svn}/chromium-skia-harmony.patch?h=packages/chromium"
@@ -74,7 +76,7 @@ sha256sums=('f51f6fca5d9abbef855aa6b5bf427410c6e96ae58b64a7d45f843868cfb0ac8e'
             '896993987d4ef9f0ac7db454f288117316c2c80ed0b6764019afd760db222dad'
             '3df9b3bbdc07fde63d9e400954dcc6ab6e0e5454f0ef6447570eef0549337354'
             '7e8f34e146284aa63d34d50663e52a94f8cbeaaa431ba27bdc948592dd930662'
-            'c666cde5bd67d58c98a9deffccee8986c6fbf8d15d33737c38409482fa73ad09'
+            '59a6f683656d26ca161cc106869113bcba111f09f10306021c96eba9239df73f'
             '0a8d1af2a3734b5f99ea8462940e332db4acee7130fe436ad3e4b7ad133e5ae5'
             '21f631851cdcb347f40793485b168cb5d0da65ae26ae39ba58d624c66197d0a5'
             'e477aa48a11ca4d53927f66a9593567fcd053325fb38af30ac3508465f1dd1f6'
@@ -82,6 +84,8 @@ sha256sums=('f51f6fca5d9abbef855aa6b5bf427410c6e96ae58b64a7d45f843868cfb0ac8e'
             '5bc775c0ece84d67855f51b30eadcf96fa8163b416d2036e9f9ba19072f54dfe'
             'e530d1b39504c2ab247e16f1602359c484e9e8be4ef6d4824d68b14d29a7f60b'
             '5db225565336a3d9b9e9f341281680433c0b7bb343dff2698b2acffd86585cbe'
+            'ae3bf107834bd8eda9a3ec7899fe35fde62e6111062e5def7d24bf49b53db3db'
+            '46f7fc9768730c460b27681ccf3dc2685c7e1fd22d70d3a82d9e57e3389bb014'
             '0ec6ee49113cc8cc5036fa008519b94137df6987bf1f9fbffb2d42d298af868a'
             '709e2fddba3c1f2ed4deb3a239fc0479bfa50c46e054e7f32db4fb1365fed070'
             '771292942c0901092a402cc60ee883877a99fb804cb54d568c8c6c94565a48e1'
@@ -155,6 +159,10 @@ prepare() {
 
   # https://crbug.com/1046122
   patch -Np1 -i ../fix-browser-frame-view-not-getting-a-relayout.patch
+
+  # https://crbug.com/1049258
+  patch -Np1 -i ../rename-Relayout-in-DesktopWindowTreeHostPlatform.patch
+  patch -Np1 -i ../rebuild-Linux-frame-button-cache-when-activation.patch
 
   # Load bundled Widevine CDM if available (see chromium-widevine in the AUR)
   # M79 is supposed to download it as a component but it doesn't seem to work
@@ -255,7 +263,7 @@ build() {
   done
 
   gn gen out/Release --script-executable=/usr/bin/python2
-  ninja -C out/Release chrome chrome_sandbox chromedriver
+  ninja -j 2 -C out/Release chrome chrome_sandbox chromedriver
 }
 
 package() {
