@@ -1,7 +1,7 @@
-diff --git a/chrome/app/chromium_strings.grd b/chrome/app/chromium_strings.grd
-index 90228f4..6ce5b71 100644
---- a/chrome/app/chromium_strings.grd
-+++ b/chrome/app/chromium_strings.grd
+diff --git a/app/chromium_strings.grd b/app/chromium_strings.grd
+index 90228f41..6ce5b716 100644
+--- a/app/chromium_strings.grd
++++ b/app/chromium_strings.grd
 @@ -154,10 +154,10 @@ If you update this file, be sure also to update google_chrome_strings.grd. -->
        </if>
  
@@ -60,10 +60,71 @@ index 90228f4..6ce5b71 100644
          </message>
          <message name="IDS_HELPER_NAME" desc="The helper application's name.  Should contain the Chrome application name (IDS_PRODUCT_NAME). Example: Google Chrome Helper.">
            Chromium Helper
-diff --git a/chrome/common/chrome_paths.cc b/chrome/common/chrome_paths.cc
-index 1ca92ba..5af9b57 100644
---- a/chrome/common/chrome_paths.cc
-+++ b/chrome/common/chrome_paths.cc
+diff --git a/common/chrome_constants.cc b/common/chrome_constants.cc
+index dbfe0a80..fe95b031 100644
+--- a/common/chrome_constants.cc
++++ b/common/chrome_constants.cc
+@@ -44,13 +44,13 @@ const char kChromeVersion[] = CHROME_VERSION_STRING;
+ 
+ #if defined(OS_WIN)
+ const base::FilePath::CharType kBrowserProcessExecutableNameChromium[] =
+-    FPL("chrome.exe");
++    FPL("inox.exe");
+ const base::FilePath::CharType kBrowserProcessExecutableName[] =
+-    FPL("chrome.exe");
++    FPL("inox.exe");
+ const base::FilePath::CharType kHelperProcessExecutableNameChromium[] =
+-    FPL("chrome.exe");
++    FPL("inox.exe");
+ const base::FilePath::CharType kHelperProcessExecutableName[] =
+-    FPL("chrome.exe");
++    FPL("inox.exe");
+ #elif defined(OS_MACOSX)
+ const base::FilePath::CharType kBrowserProcessExecutableNameChromium[] =
+     FPL(CHROMIUM_PRODUCT_STRING);
+@@ -70,8 +70,8 @@ const base::FilePath::CharType kHelperProcessExecutableName[] =
+ const base::FilePath::CharType kHelperProcessExecutableNameChromium[] = FPL("");
+ #elif defined(OS_POSIX)
+ const base::FilePath::CharType kBrowserProcessExecutableNameChromium[] =
+-    FPL("chrome");
+-const base::FilePath::CharType kBrowserProcessExecutableName[] = FPL("chrome");
++    FPL("inox");
++const base::FilePath::CharType kBrowserProcessExecutableName[] = FPL("inox");
+ // Helper processes end up with a name of "exe" due to execing via
+ // /proc/self/exe.  See bug 22703.
+ const base::FilePath::CharType kHelperProcessExecutableNameChromium[] =
+@@ -81,9 +81,9 @@ const base::FilePath::CharType kHelperProcessExecutableName[] = FPL("exe");
+ 
+ #if defined(OS_WIN)
+ const base::FilePath::CharType kBrowserProcessExecutablePathChromium[] =
+-    FPL("chrome.exe");
++    FPL("inox.exe");
+ const base::FilePath::CharType kBrowserProcessExecutablePath[] =
+-    FPL("chrome.exe");
++    FPL("inox.exe");
+ const base::FilePath::CharType kHelperProcessExecutablePathChromium[] =
+     FPL("chrome.exe");
+ const base::FilePath::CharType kHelperProcessExecutablePath[] =
+@@ -107,11 +107,11 @@ const base::FilePath::CharType kHelperProcessExecutablePathChromium[] =
+     FPL("chrome");
+ #elif defined(OS_POSIX)
+ const base::FilePath::CharType kBrowserProcessExecutablePathChromium[] =
+-    FPL("chrome");
+-const base::FilePath::CharType kBrowserProcessExecutablePath[] = FPL("chrome");
++    FPL("inox");
++const base::FilePath::CharType kBrowserProcessExecutablePath[] = FPL("inox");
+ const base::FilePath::CharType kHelperProcessExecutablePathChromium[] =
+-    FPL("chrome");
+-const base::FilePath::CharType kHelperProcessExecutablePath[] = FPL("chrome");
++    FPL("inox");
++const base::FilePath::CharType kHelperProcessExecutablePath[] = FPL("inox");
+ #endif  // OS_*
+ 
+ #if defined(OS_MACOSX)
+diff --git a/common/chrome_paths.cc b/common/chrome_paths.cc
+index 1ca92ba2..5af9b574 100644
+--- a/common/chrome_paths.cc
++++ b/common/chrome_paths.cc
 @@ -58,7 +58,7 @@ const base::FilePath::CharType kFilepathSinglePrefExtensions[] =
  #if BUILDFLAG(GOOGLE_CHROME_BRANDING)
      FILE_PATH_LITERAL("/usr/share/google-chrome/extensions");
@@ -73,23 +134,20 @@ index 1ca92ba..5af9b57 100644
  #endif  // BUILDFLAG(GOOGLE_CHROME_BRANDING)
  
  // The path to the hint file that tells the pepper plugin loader
-diff --git a/chrome/test/chromedriver/chrome/chrome_finder.cc b/chrome/test/chromedriver/chrome/chrome_finder.cc
-index 6cfcf9a..fe6950d 100644
---- a/chrome/test/chromedriver/chrome/chrome_finder.cc
-+++ b/chrome/test/chromedriver/chrome/chrome_finder.cc
-@@ -134,14 +134,7 @@ void GetApplicationDirs(std::vector<base::FilePath>* locations);
- bool FindChrome(base::FilePath* browser_exe) {
- #if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX)
-   base::FilePath browser_exes_array[] = {
--    base::FilePath(chrome::kBrowserProcessExecutablePath),
--    base::FilePath(chrome::kBrowserProcessExecutablePathChromium),
--#if defined(OS_LINUX)
+diff --git a/test/chromedriver/chrome/chrome_finder.cc b/test/chromedriver/chrome/chrome_finder.cc
+index 9b8ab311..cd925d1b 100644
+--- a/test/chromedriver/chrome/chrome_finder.cc
++++ b/test/chromedriver/chrome/chrome_finder.cc
+@@ -137,11 +137,9 @@ bool FindChrome(base::FilePath* browser_exe) {
+     base::FilePath(chrome::kBrowserProcessExecutablePath),
+     base::FilePath(chrome::kBrowserProcessExecutablePathChromium)
+ #elif defined(OS_LINUX)
 -    base::FilePath("google-chrome"),
--    base::FilePath("chrome"),
+     base::FilePath(chrome::kBrowserProcessExecutablePath),
+     base::FilePath(chrome::kBrowserProcessExecutablePathChromium),
 -    base::FilePath("chromium"),
 -    base::FilePath("chromium-browser")
--#endif
 +    base::FilePath("inox")
  #else
-       // it will compile but won't work on other OSes
-       base::FilePath()
+     // it will compile but won't work on other OSes
+     base::FilePath()
