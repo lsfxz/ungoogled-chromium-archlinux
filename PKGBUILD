@@ -8,10 +8,10 @@
 
 pkgname=inox
 _pkgname=ungoogled-chromium
-pkgver=80.0.3987.87
-pkgrel=2
+pkgver=80.0.3987.106
+pkgrel=1
 _launcher_ver=6
-_ungoogled_commit=a2fa3ae20f47e576bf0b070358df46afe132e14a
+_ungoogled_commit=52cd482e7477d1131139c82ac2c41c5b89f59c8c
 pkgdesc="A lightweight approach to removing Google web service dependency - inox branded"
 arch=('x86_64')
 url="https://github.com/ungoogled-software/ungoogled-chromium-archlinux"
@@ -33,6 +33,7 @@ conflicts=('inox')
 _raw_github=https://raw.githubusercontent.com/lsfxz/ungoogled-chromium-archlinux/inox
 _arch_svn=https://git.archlinux.org/svntogit/packages.git/plain/trunk
 source=(https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${pkgver}.tar.xz
+        https://github.com/Eloston/ungoogled-chromium/pull/934.patch
         chromium-launcher-$_launcher_ver.tar.gz::https://github.com/foutrelis/chromium-launcher/archive/v$_launcher_ver.tar.gz
         "ungoogled-chromium::git+https://github.com/Eloston/ungoogled-chromium.git#commit=${_ungoogled_commit}"
         "https://raw.githubusercontent.com/GrapheneOS/Vanadium/10/0009-disable-seed-based-field-trials.patch"
@@ -54,14 +55,14 @@ source=(https://commondatastorage.googleapis.com/chromium-browser-official/chrom
         "fix-building-with-system-zlib.patch::${_arch_svn}/fix-building-with-system-zlib.patch?h=packages/chromium"
         "remove-verbose-logging-in-local-unique-font-matching.patch::${_arch_svn}/remove-verbose-logging-in-local-unique-font-matching.patch?h=packages/chromium"
         "fix-building-with-unbundled-libxml.patch::${_arch_svn}/fix-building-with-unbundled-libxml.patch?h=packages/chromium"
-        "fix-browser-frame-view-not-getting-a-relayout.patch::${_arch_svn}/fix-browser-frame-view-not-getting-a-relayout.patch?h=packages/chromium"
         "rename-Relayout-in-DesktopWindowTreeHostPlatform.patch::${_arch_svn}/rename-Relayout-in-DesktopWindowTreeHostPlatform.patch?h=packages/chromium"
         "rebuild-Linux-frame-button-cache-when-activation.patch::${_arch_svn}/rebuild-Linux-frame-button-cache-when-activation.patch?h=packages/chromium"
         "vaapi-fix.patch::https://aur.archlinux.org/cgit/aur.git/plain/vaapi-fix.patch?h=chromium-vaapi"
         "chromium-widevine.patch::${_arch_svn}/chromium-widevine.patch?h=packages/chromium"
         "chromium-skia-harmony.patch::${_arch_svn}/chromium-skia-harmony.patch?h=packages/chromium"
         "sync-enable-USSPasswords-by-default.patch::${_arch_svn}/sync-enable-USSPasswords-by-default.patch?h=packages/chromium")
-sha256sums=('f51f6fca5d9abbef855aa6b5bf427410c6e96ae58b64a7d45f843868cfb0ac8e'
+sha256sums=('2ead924b4414a8a5f085fa0e0df56563ef41bd4290cc403c05d5beec238cbe82'
+            'cdf6be61a5bd8ee4db05c0909bf062d08940651e6619cbaa1f451e56c978feb4'
             '04917e3cd4307d8e31bfb0027a5dce6d086edb10ff8a716024fbb8bb0c7dccf1'
             'SKIP'
             '347033ea7a97aef39858fec4cde2dd7e2385cc231c9ebbfea8cf91ff800a0b3b'
@@ -76,14 +77,13 @@ sha256sums=('f51f6fca5d9abbef855aa6b5bf427410c6e96ae58b64a7d45f843868cfb0ac8e'
             '896993987d4ef9f0ac7db454f288117316c2c80ed0b6764019afd760db222dad'
             '3df9b3bbdc07fde63d9e400954dcc6ab6e0e5454f0ef6447570eef0549337354'
             '7e8f34e146284aa63d34d50663e52a94f8cbeaaa431ba27bdc948592dd930662'
-            '59a6f683656d26ca161cc106869113bcba111f09f10306021c96eba9239df73f'
+            'd0ff7f9dd4b7bf5bcb70a191f8d7ace292a936cf2123e24ce005ea84de118816'
             '0a8d1af2a3734b5f99ea8462940e332db4acee7130fe436ad3e4b7ad133e5ae5'
             '21f631851cdcb347f40793485b168cb5d0da65ae26ae39ba58d624c66197d0a5'
             'e477aa48a11ca4d53927f66a9593567fcd053325fb38af30ac3508465f1dd1f6'
             '18276e65c68a0c328601b12fefb7e8bfc632346f34b87e64944c9de8c95c5cfa'
             '5bc775c0ece84d67855f51b30eadcf96fa8163b416d2036e9f9ba19072f54dfe'
             'e530d1b39504c2ab247e16f1602359c484e9e8be4ef6d4824d68b14d29a7f60b'
-            '5db225565336a3d9b9e9f341281680433c0b7bb343dff2698b2acffd86585cbe'
             'ae3bf107834bd8eda9a3ec7899fe35fde62e6111062e5def7d24bf49b53db3db'
             '46f7fc9768730c460b27681ccf3dc2685c7e1fd22d70d3a82d9e57e3389bb014'
             '0ec6ee49113cc8cc5036fa008519b94137df6987bf1f9fbffb2d42d298af868a'
@@ -157,9 +157,6 @@ prepare() {
   # https://crbug.com/1043042
   patch -Np1 -i ../fix-building-with-unbundled-libxml.patch
 
-  # https://crbug.com/1046122
-  patch -Np1 -i ../fix-browser-frame-view-not-getting-a-relayout.patch
-
   # https://crbug.com/1049258
   patch -Np1 -i ../rename-Relayout-in-DesktopWindowTreeHostPlatform.patch
   patch -Np1 -i ../rebuild-Linux-frame-button-cache-when-activation.patch
@@ -174,6 +171,10 @@ prepare() {
   # Ungoogled chromium stuff
   _ungoogled_repo="$srcdir/$_pkgname"
 
+  cd ${_ungoogled_repo}
+  patch -Np1 -i ${srcdir}/934.patch
+  cd "$srcdir/chromium-${pkgver}"
+
   _utils="${_ungoogled_repo}/utils"
   msg2 'Applying ungoogled chromium patches'
   # Prune binaries
@@ -184,7 +185,9 @@ prepare() {
   python "$_utils/domain_substitution.py" apply -r "$_ungoogled_repo/domain_regex.list" -f "$_ungoogled_repo/domain_substitution.list" -c domainsubcache.tar.gz ./
 
   # inox/vanadium
-  patch -Np1 -i ../0012-branding.patch
+  cd chrome
+  patch -Np1 -i ../../0012-branding.patch
+  cd ..
   patch -Np1 -i ../0009-disable-seed-based-field-trials.patch
 
   # Force script incompatible with Python 3 to use /usr/bin/python2
@@ -263,7 +266,7 @@ build() {
   done
 
   gn gen out/Release --script-executable=/usr/bin/python2
-  ninja -j 2 -C out/Release chrome chrome_sandbox chromedriver
+  ninja -j 4 -C out/Release chrome chrome_sandbox chromedriver
 }
 
 package() {
