@@ -20,7 +20,7 @@ depends=('gtk3' 'nss' 'alsa-lib' 'xdg-utils' 'libxss' 'libcups' 'libgcrypt'
          'ttf-font' 'systemd' 'dbus' 'libpulse' 'pciutils' 'json-glib'
          'desktop-file-utils' 'hicolor-icon-theme')
 makedepends=('python' 'python2' 'gperf' 'yasm' 'mesa' 'ninja' 'nodejs' 'git'
-             'pipewire' 'clang' 'lld' 'gn' 'java-runtime-headless' 'tar-multi')
+             'pipewire' 'clang' 'lld' 'gn' 'java-runtime-headless')
 optdepends=('pepper-flash: support for Flash content'
             'kdialog: needed for file dialogs in KDE'
             'org.freedesktop.secrets: password storage backend on GNOME / Xfce'
@@ -32,7 +32,6 @@ provides=('inox')
 conflicts=('inox')
 _raw_github=https://raw.githubusercontent.com/lsfxz/ungoogled-chromium-archlinux/inox
 _arch_svn=https://git.archlinux.org/svntogit/packages.git/plain/trunk
-noextract=("chromium-${pkgver}.tar.xz")
 source=(https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${pkgver}.tar.xz
         https://github.com/Eloston/ungoogled-chromium/pull/942.patch
         chromium-launcher-$_launcher_ver.tar.gz::https://github.com/foutrelis/chromium-launcher/archive/v$_launcher_ver.tar.gz
@@ -121,11 +120,6 @@ _unwanted_bundled_libs=(
 depends+=(${_system_libs[@]})
 
 prepare() {
-  cd ${srcdir}
-  export XZ_DEFAULTS='-T 0'
-  tar -xf "${srcdir}/chromium-${pkgver}.tar.xz"
-  cd "$srcdir/chromium-${pkgver}"
-
   # Allow building against system libraries in official builds
   sed -i 's/OFFICIAL_BUILD/GOOGLE_CHROME_BUILD/' \
     tools/generate_shim_headers/generate_shim_headers.py
