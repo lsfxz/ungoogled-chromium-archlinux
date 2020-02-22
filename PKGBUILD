@@ -8,10 +8,10 @@
 
 pkgname=inox
 _pkgname=ungoogled-chromium
-pkgver=80.0.3987.106
+pkgver=80.0.3987.116
 pkgrel=1
 _launcher_ver=6
-_ungoogled_commit=52cd482e7477d1131139c82ac2c41c5b89f59c8c
+_ungoogled_commit=bb952f18c8c80c569583edd8dbb0b54443f49043
 pkgdesc="A lightweight approach to removing Google web service dependency - inox branded"
 arch=('x86_64')
 url="https://github.com/ungoogled-software/ungoogled-chromium-archlinux"
@@ -20,7 +20,7 @@ depends=('gtk3' 'nss' 'alsa-lib' 'xdg-utils' 'libxss' 'libcups' 'libgcrypt'
          'ttf-font' 'systemd' 'dbus' 'libpulse' 'pciutils' 'json-glib'
          'desktop-file-utils' 'hicolor-icon-theme')
 makedepends=('python' 'python2' 'gperf' 'yasm' 'mesa' 'ninja' 'nodejs' 'git'
-             'pipewire' 'clang' 'lld' 'gn' 'java-runtime-headless')
+             'pipewire' 'clang' 'lld' 'gn' 'java-runtime-headless' 'tar-multi')
 optdepends=('pepper-flash: support for Flash content'
             'kdialog: needed for file dialogs in KDE'
             'org.freedesktop.secrets: password storage backend on GNOME / Xfce'
@@ -32,11 +32,12 @@ provides=('inox')
 conflicts=('inox')
 _raw_github=https://raw.githubusercontent.com/lsfxz/ungoogled-chromium-archlinux/inox
 _arch_svn=https://git.archlinux.org/svntogit/packages.git/plain/trunk
+noextract=("chromium-${pkgver}.tar.xz")
 source=(https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${pkgver}.tar.xz
-        https://github.com/Eloston/ungoogled-chromium/pull/934.patch
+        https://github.com/Eloston/ungoogled-chromium/pull/942.patch
         chromium-launcher-$_launcher_ver.tar.gz::https://github.com/foutrelis/chromium-launcher/archive/v$_launcher_ver.tar.gz
         "ungoogled-chromium::git+https://github.com/Eloston/ungoogled-chromium.git#commit=${_ungoogled_commit}"
-        "https://raw.githubusercontent.com/GrapheneOS/Vanadium/10/0009-disable-seed-based-field-trials.patch"
+        "https://raw.githubusercontent.com/GrapheneOS/Vanadium/10/0010-disable-seed-based-field-trials.patch"
         flags.archlinux.gn
         inox-drirc-disable-10bpc-color-configs.conf
         "${_raw_github}/inox/product_logo_16.png"
@@ -61,11 +62,11 @@ source=(https://commondatastorage.googleapis.com/chromium-browser-official/chrom
         "chromium-widevine.patch::${_arch_svn}/chromium-widevine.patch?h=packages/chromium"
         "chromium-skia-harmony.patch::${_arch_svn}/chromium-skia-harmony.patch?h=packages/chromium"
         "sync-enable-USSPasswords-by-default.patch::${_arch_svn}/sync-enable-USSPasswords-by-default.patch?h=packages/chromium")
-sha256sums=('2ead924b4414a8a5f085fa0e0df56563ef41bd4290cc403c05d5beec238cbe82'
-            'cdf6be61a5bd8ee4db05c0909bf062d08940651e6619cbaa1f451e56c978feb4'
+sha256sums=('65c5d9bc510b712170c6013acd3bbb07d770a1ce02d64d01890386e9e5678901'
+            '8258b1b98c6402728020e700b29072448efdf23db39b433c93f15fb62f08b6d8'
             '04917e3cd4307d8e31bfb0027a5dce6d086edb10ff8a716024fbb8bb0c7dccf1'
             'SKIP'
-            '347033ea7a97aef39858fec4cde2dd7e2385cc231c9ebbfea8cf91ff800a0b3b'
+            '276398e8db5a82de2345c765bbb1a2ac4fa86e082eb6c5f36a7ca8ff19683362'
             '595386d403e7ab3ebce77037ecf2fa5c40ec4d07e2bd3cbfcf72857467e004d3'
             '38ebabfb8f15a14d7feed1c5210dbcdcc1768cba08e9b3b5031ee588752ddc58'
             '71471fa4690894420f9e04a2e9a622af620d92ac2714a35f9a4c4e90fa3968dd'
@@ -120,6 +121,9 @@ _unwanted_bundled_libs=(
 depends+=(${_system_libs[@]})
 
 prepare() {
+  cd ${srcdir}
+  export XZ_DEFAULTS='-T 0'
+  tar -xf "${srcdir}/chromium-${pkgver}.tar.xz"
   cd "$srcdir/chromium-${pkgver}"
 
   # Allow building against system libraries in official builds
@@ -172,7 +176,7 @@ prepare() {
   _ungoogled_repo="$srcdir/$_pkgname"
 
   cd ${_ungoogled_repo}
-  patch -Np1 -i ${srcdir}/934.patch
+  patch -Np1 -i ${srcdir}/942.patch
   cd "$srcdir/chromium-${pkgver}"
 
   _utils="${_ungoogled_repo}/utils"
@@ -188,7 +192,7 @@ prepare() {
   cd chrome
   patch -Np1 -i ../../0012-branding.patch
   cd ..
-  patch -Np1 -i ../0009-disable-seed-based-field-trials.patch
+  patch -Np1 -i ../0010-disable-seed-based-field-trials.patch
 
   # Force script incompatible with Python 3 to use /usr/bin/python2
   sed -i '1s|python$|&2|' third_party/dom_distiller_js/protoc_plugins/*.py
