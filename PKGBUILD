@@ -265,7 +265,7 @@ build() {
   done
 
   gn gen out/Release --script-executable=/usr/bin/python2
-  ninja -j 4 -C out/Release chrome chrome_sandbox chromedriver
+  ninja -C out/Release chrome chrome_sandbox chromedriver
 }
 
 package() {
