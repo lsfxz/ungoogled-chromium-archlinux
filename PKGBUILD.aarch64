@@ -60,11 +60,11 @@ source=(https://commondatastorage.googleapis.com/chromium-browser-official/chrom
         "chromium-skia-harmony.patch::${_arch_svn}/chromium-skia-harmony.patch?h=packages/chromium"
         "${_alarm_github}0001-crashpad-include-limits.patch"
         "sync-enable-USSPasswords-by-default.patch::${_arch_svn}/sync-enable-USSPasswords-by-default.patch?h=packages/chromium")
-sha256sums=('2ead924b4414a8a5f085fa0e0df56563ef41bd4290cc403c05d5beec238cbe82'
-            'cdf6be61a5bd8ee4db05c0909bf062d08940651e6619cbaa1f451e56c978feb4'
+sha256sums=('65c5d9bc510b712170c6013acd3bbb07d770a1ce02d64d01890386e9e5678901'
+            '8258b1b98c6402728020e700b29072448efdf23db39b433c93f15fb62f08b6d8'
             '04917e3cd4307d8e31bfb0027a5dce6d086edb10ff8a716024fbb8bb0c7dccf1'
             'SKIP'
-            '347033ea7a97aef39858fec4cde2dd7e2385cc231c9ebbfea8cf91ff800a0b3b'
+            '276398e8db5a82de2345c765bbb1a2ac4fa86e082eb6c5f36a7ca8ff19683362'
             '595386d403e7ab3ebce77037ecf2fa5c40ec4d07e2bd3cbfcf72857467e004d3'
             '38ebabfb8f15a14d7feed1c5210dbcdcc1768cba08e9b3b5031ee588752ddc58'
             '71471fa4690894420f9e04a2e9a622af620d92ac2714a35f9a4c4e90fa3968dd'
