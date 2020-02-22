@@ -16,12 +16,12 @@ steps:
     commands:
       - pacman --noconfirm -Syu --needed base-devel git
       - git clone https://github.com/lsfxz/ungoogled-chromium-archlinux inox
+      - cd inox
       - git checkout inox
       - "echo 'nobody ALL=(ALL) NOPASSWD: /usr/bin/pacman' >> /etc/sudoers"
       - usermod -e '' nobody
       - mkdir -p /home/nobody && chown -R nobody /home/nobody
       - usermod -d /home/nobody nobody
-      - cd inox
       - sudo -u nobody -E -H makepkg --noconfirm --nosign --syncdeps --cleanbuild --skippgpcheck -p PKGBUILD.aarch64
 
 trigger:
