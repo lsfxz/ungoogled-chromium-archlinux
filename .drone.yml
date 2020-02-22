@@ -22,6 +22,7 @@ steps:
       - usermod -e '' nobody
       - mkdir -p /home/nobody && chown -R nobody /home/nobody
       - usermod -d /home/nobody nobody
+      - chown -R nobody ./inox
       - sudo -u nobody -E -H makepkg --noconfirm --nosign --syncdeps --cleanbuild --skippgpcheck -p PKGBUILD.aarch64
 
 trigger:
