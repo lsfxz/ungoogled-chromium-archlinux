@@ -1,0 +1,24 @@
+---
+kind: pipeline
+type: docker
+name: build_aarch64
+
+platform:
+  os: linux
+  arch: arm64
+
+steps:
+  - name: build
+    image: registry.gitlab.com/ohfp/manjaro-arm-docker
+    commands:
+      - git checkout inox
+      - pacman --noconfirm -Syu --needed base-devel
+      - "echo 'nobody ALL=(ALL) NOPASSWD: /usr/bin/pacman' >> /etc/sudoers"
+      - usermod -e '' nobody
+      - mkdir -p /home/nobody && chown -R nobody /home/nobody
+      - usermod -d /home/nobody nobody
+      - sudo -u nobody -E -H makepkg --noconfirm --nosign --syncdeps --cleanbuild --skippgpcheck -p PKGBUILD.aarch64
+
+trigger:
+  event:
+    - tag
